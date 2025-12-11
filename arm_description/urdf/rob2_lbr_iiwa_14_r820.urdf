@@ -1,0 +1,421 @@
+<?xml version="1.0" ?>
+<robot name="robot2_kuka_lbr_iiwa_14_r820" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ========================= -->
+  <!-- World + 偏移避免穿模       -->
+  <!-- ========================= -->
+  <link name="world"/>
+
+  <!-- robot2 放到 x=1.2 m -->
+  <joint name="robot2_world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="robot2_base_link"/>
+    <origin xyz="1.2 0 0.05" rpy="0 0 0"/>
+  </joint>
+
+
+  <!-- ========================= -->
+  <!--  LINK LIST                -->
+  <!-- ========================= -->
+
+  <link name="robot2_base_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="50"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+               iyy="0.0001" iyz="0.0"
+               izz="0.0001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/base_link.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/base_link.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="robot2_link_1">
+    <inertial>
+      <origin xyz="0 0 0.027" rpy="0 0 0"/>
+      <mass value="3.9478"/>
+      <inertia ixx="0.010" ixy="0.0" ixz="0.0"
+               iyy="0.010" iyz="0.0"
+               izz="0.010"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_1.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="robot2_link_2">
+    <inertial>
+      <origin xyz="0 0 0.016" rpy="0 0 0"/>
+      <mass value="3.7876"/>
+      <inertia ixx="0.009" ixy="0.0" ixz="0.0"
+               iyy="0.009" iyz="0.0"
+               izz="0.009"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="robot2_link_3">
+    <inertial>
+      <origin xyz="0 0 0.010" rpy="0 0 0"/>
+      <mass value="3.2104"/>
+      <inertia ixx="0.008" ixy="0.0" ixz="0.0"
+               iyy="0.008" iyz="0.0"
+               izz="0.008"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_3.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_3.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="robot2_link_4">
+    <inertial>
+      <origin xyz="0 0 0.005" rpy="0 0 0"/>
+      <mass value="2.7537"/>
+      <inertia ixx="0.007" ixy="0.0" ixz="0.0"
+               iyy="0.007" iyz="0.0"
+               izz="0.007"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_4.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_4.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="robot2_link_5">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="2.0832"/>
+      <inertia ixx="0.005" ixy="0.0" ixz="0.0"
+               iyy="0.005" iyz="0.0"
+               izz="0.005"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_5.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_5.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="robot2_link_6">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.5479"/>
+      <inertia ixx="0.004" ixy="0.0" ixz="0.0"
+               iyy="0.004" iyz="0.0"
+               izz="0.004"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_6.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_6.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="robot2_link_7">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.2812"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0"
+               iyy="0.003" iyz="0.0"
+               izz="0.003"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_7.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_7.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+  <!-- ========================= -->
+  <!--  JOINT LIST              -->
+  <!-- ========================= -->
+
+  <joint name="robot2_joint_a1" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="robot2_base_link"/>
+    <child link="robot2_link_1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200" lower="-2.9668" upper="2.9668" velocity="1.4834"/>
+  </joint>
+
+  <joint name="robot2_joint_a2" type="revolute">
+    <origin rpy="0 0 0" xyz="-0.00043624 0 0.36"/>
+    <parent link="robot2_link_1"/>
+    <child link="robot2_link_2"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="200" lower="-2.0942" upper="2.0942" velocity="1.4834"/>
+  </joint>
+
+  <joint name="robot2_joint_a3" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="robot2_link_2"/>
+    <child link="robot2_link_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200" lower="-2.9668" upper="2.9668" velocity="1.7452"/>
+  </joint>
+
+  <joint name="robot2_joint_a4" type="revolute">
+    <origin rpy="0 0 0" xyz="0.00043624 0 0.42"/>
+    <parent link="robot2_link_3"/>
+    <child link="robot2_link_4"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="200" lower="-2.0942" upper="2.0942" velocity="1.3089"/>
+  </joint>
+
+  <joint name="robot2_joint_a5" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="robot2_link_4"/>
+    <child link="robot2_link_5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200" lower="-2.9668" upper="2.9668" velocity="2.2688"/>
+  </joint>
+
+  <joint name="robot2_joint_a6" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.4"/>
+    <parent link="robot2_link_5"/>
+    <child link="robot2_link_6"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="200" lower="-2.0942" upper="2.0942" velocity="2.356"/>
+  </joint>
+
+  <joint name="robot2_joint_a7" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="robot2_link_6"/>
+    <child link="robot2_link_7"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200" lower="-3.0541" upper="3.0541" velocity="2.356"/>
+  </joint>
+
+
+  <!-- base_link to base -->
+  <link name="robot2_base"/>
+  <joint name="robot2_base_link-base" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="robot2_base_link"/>
+    <child link="robot2_base"/>
+  </joint>
+
+
+  <!-- ========================= -->
+  <!-- Transmissions             -->
+  <!-- ========================= -->
+
+  <transmission name="robot2_trans_joint_a1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="robot2_joint_a1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="robot2_motor_a1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="robot2_trans_joint_a2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="robot2_joint_a2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="robot2_motor_a2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="robot2_trans_joint_a3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="robot2_joint_a3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="robot2_motor_a3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="robot2_trans_joint_a4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="robot2_joint_a4">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="robot2_motor_a4">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="robot2_trans_joint_a5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="robot2_joint_a5">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="robot2_motor_a5">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="robot2_trans_joint_a6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="robot2_joint_a6">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="robot2_motor_a6">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="robot2_trans_joint_a7">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="robot2_joint_a7">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="robot2_motor_a7">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+  <!-- ========================= -->
+  <!-- Gazebo ros_control        -->
+  <!-- ========================= -->
+  <gazebo>
+    <plugin name="robot2_gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/robot2</robotNamespace>
+      <controlPeriod>0.001</controlPeriod>
+      <legacyModeNS>false</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+
+  <!-- Base friction -->
+  <gazebo reference="robot2_base_link">
+    <material>Gazebo/Gray</material>
+    <mu1>10.0</mu1>
+    <mu2>10.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+    <fdir1>0 0 0</fdir1>
+  </gazebo>
+
+
+  <!-- ========================= -->
+  <!-- Payload                   -->
+  <!-- ========================= -->
+
+  <joint name="robot2_payload_joint" type="fixed">
+    <parent link="robot2_link_7"/>
+    <child link="robot2_payload_link"/>
+    <origin xyz="0 0 0.2" rpy="0 0 0"/>
+  </joint>
+
+  <link name="robot2_payload_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="10.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0"
+               iyy="0.01" iyz="0"
+               izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="robot2_payload_grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+  <!-- ========================= -->
+  <!-- acceleration plugin       -->
+  <!-- ========================= -->
+
+  <gazebo>
+    <plugin name="robot2_link_accel_plugin" filename="libgazebo_link_accel_plugin.so">
+      <updateRate>500.0</updateRate>
+      <robotNamespace>/robot2</robotNamespace>
+      <topicName>/robot2/gazebo/link_accel</topicName>
+      <gaussianNoise>0.0</gaussianNoise>
+    </plugin>
+  </gazebo>
+
+</robot>

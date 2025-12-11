@@ -1,0 +1,41 @@
+# Arm SLQ Solver Configuration
+# Sinusoidal end-effector trajectory tracking
+
+# Robot model
+robot:
+  urdf_file: ""  # Set via launch parameter
+  ee_frame: "tool0"
+  base_frame: "base_link"
+
+# Initial end-effector position (meters)
+initial_ee_position:
+  x: 0.5
+  y: 0.0
+  z: 0.5
+
+# Sinusoidal trajectory parameters
+sine_trajectory:
+  amplitude_x: 0.05  # meters
+  amplitude_y: 0.0   # meters (usually 0)
+  amplitude_z: 0.05  # meters
+  frequency: 0.5     # Hz
+  phase_x: 0.0       # radians
+  phase_z: 1.5708    # radians (pi/2 for 90 degree phase shift)
+
+# Optimization settings
+optimization:
+  time_horizon: 4.0     # seconds
+  num_iterations: 50
+  convergence_tol: 1e-4
+  time_step: 0.01       # seconds (100 Hz discretization)
+
+# Cost weights
+cost:
+  position_weight: 1000.0
+  input_weight: 0.01
+
+# Output
+output:
+  save_trajectory: true
+  output_file: "/tmp/arm_trajectory.csv"
+  publish_ros: true

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>arm_control</name>
+  <version>0.0.0</version>
+  <description>The arm_control package</description>
+  <maintainer email="user@todo.todo">user</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>controller_interface</depend>
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>ocs2_core</depend>
+  <depend>ocs2_oc</depend>
+  <depend>ocs2_ddp</depend>
+  <depend>ocs2_mpc</depend>
+  <depend>ocs2_pinocchio_interface</depend>
+  <depend>ocs2_robotic_tools</depend>
+  <depend>pinocchio</depend>
+  <depend>arm_description</depend>
+
+  <export>
+    <controller_interface plugin="${prefix}/arm_controller_plugins.xml"/>
+  </export>
+</package>

@@ -1,0 +1,418 @@
+<?xml version="1.0" ?>
+<robot name="kuka_lbr_iiwa_14_r820" xmlns:xacro="http://wiki.ros.org/xacro">
+  <!-- link list -->
+    <!-- ✅ 固定 base_link 到 Gazebo 世界 -->
+  <link name="world"/>
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>  <!-- 可调高度，让底座正好贴地 -->
+  </joint>
+
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="50"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+               iyy="0.0001" iyz="0.0"
+               izz="0.0001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/base_link.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/base_link.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_1">
+    <inertial>
+      <origin xyz="0 0 0.027" rpy="0 0 0"/>
+      <mass value="3.9478"/>
+      <inertia ixx="0.010" ixy="0.0" ixz="0.0"
+               iyy="0.010" iyz="0.0"
+               izz="0.010"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_1.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_2">
+    <inertial>
+      <origin xyz="0 0 0.016" rpy="0 0 0"/>
+      <mass value="3.7876"/>
+      <inertia ixx="0.009" ixy="0.0" ixz="0.0"
+               iyy="0.009" iyz="0.0"
+               izz="0.009"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_3">
+    <inertial>
+      <origin xyz="0 0 0.010" rpy="0 0 0"/>
+      <mass value="3.2104"/>
+      <inertia ixx="0.008" ixy="0.0" ixz="0.0"
+               iyy="0.008" iyz="0.0"
+               izz="0.008"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_3.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_3.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_4">
+    <inertial>
+      <origin xyz="0 0 0.005" rpy="0 0 0"/>
+      <mass value="2.7537"/>
+      <inertia ixx="0.007" ixy="0.0" ixz="0.0"
+               iyy="0.007" iyz="0.0"
+               izz="0.007"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_4.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_4.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_5">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="2.0832"/>
+      <inertia ixx="0.005" ixy="0.0" ixz="0.0"
+               iyy="0.005" iyz="0.0"
+               izz="0.005"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_5.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_5.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_6">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.5479"/>
+      <inertia ixx="0.004" ixy="0.0" ixz="0.0"
+               iyy="0.004" iyz="0.0"
+               izz="0.004"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_6.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_6.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_7">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.2812"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0"
+               iyy="0.003" iyz="0.0"
+               izz="0.003"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/visual/link_7.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://arm_description/meshes/lbr_iiwa_14_r820/collision/link_7.stl"/>
+      </geometry>
+    </collision>
+  </link>
+<!-- 固定关节：法兰 -> 立方体 -->
+
+<!-- =========================================
+     立方体耦合到机械臂末端 (link_7)
+     ========================================= -->
+
+
+
+
+  <!-- end of link list -->
+
+  <!-- joint list -->
+  <joint name="joint_a1" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="link_1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200" lower="-2.9668" upper="2.9668" velocity="1.4834"/>
+  </joint>
+  <joint name="joint_a2" type="revolute">
+    <origin rpy="0 0 0" xyz="-0.00043624 0 0.36"/>
+    <parent link="link_1"/>
+    <child link="link_2"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="200" lower="-2.0942" upper="2.0942" velocity="1.4834"/>
+  </joint>
+  <joint name="joint_a3" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="link_2"/>
+    <child link="link_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200" lower="-2.9668" upper="2.9668" velocity="1.7452"/>
+  </joint>
+  <joint name="joint_a4" type="revolute">
+    <origin rpy="0 0 0" xyz="0.00043624 0 0.42"/>
+    <parent link="link_3"/>
+    <child link="link_4"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="200" lower="-2.0942" upper="2.0942" velocity="1.3089"/>
+  </joint>
+  <joint name="joint_a5" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="link_4"/>
+    <child link="link_5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200" lower="-2.9668" upper="2.9668" velocity="2.2688"/>
+  </joint>
+  <joint name="joint_a6" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.4"/>
+    <parent link="link_5"/>
+    <child link="link_6"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="200" lower="-2.0942" upper="2.0942" velocity="2.356"/>
+  </joint>
+  <joint name="joint_a7" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="link_6"/>
+    <child link="link_7"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200" lower="-3.0541" upper="3.0541" velocity="2.356"/>
+  </joint>
+
+
+  <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
+  <link name="base"/>
+  <joint name="base_link-base" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="base"/>
+  </joint>
+    <!-- ===================================================== -->
+  <!-- Gazebo ROS Control 插件：连接 MoveIt 与 Gazebo -->
+  <!-- ===================================================== -->
+  
+  <!-- Transmission definitions for Gazebo ros_control -->
+<transmission name="trans_joint_a1">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint_a1">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor_a1">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="trans_joint_a2">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint_a2">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor_a2">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="trans_joint_a3">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint_a3">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor_a3">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="trans_joint_a4">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint_a4">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor_a4">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="trans_joint_a5">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint_a5">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor_a5">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="trans_joint_a6">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint_a6">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor_a6">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="trans_joint_a7">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint_a7">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor_a7">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <!-- 可选参数：更新频率 -->
+      <robotNamespace>/</robotNamespace>
+      <controlPeriod>0.001</controlPeriod>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+  <!-- ===================================================== -->
+  <!-- Gazebo 材质与地面摩擦配置 -->
+  <!-- ===================================================== -->
+  <gazebo reference="base_link">
+    <material>Gazebo/Gray</material>
+    <mu1>10.0</mu1>         <!-- 摩擦系数 -->
+    <mu2>10.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+    <fdir1>0 0 0</fdir1>
+  </gazebo>
+<!-- payload block: 固定负载模拟 -->
+<joint name="payload_joint" type="fixed">
+  <parent link="link_7"/>
+  <child link="payload_link"/>
+  <origin xyz="0 0 0.2" rpy="0 0 0"/>
+</joint>
+
+<link name="payload_link">
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="10.0"/>  <!-- 2kg 负载 -->
+    <inertia
+      ixx="0.01" ixy="0" ixz="0"
+      iyy="0.01" iyz="0"
+      izz="0.01"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <box size="0.1 0.1 0.1"/>
+    </geometry>
+    <material name="payload_grey">
+      <color rgba="0.5 0.5 0.5 1.0"/>
+    </material>
+  </visual>
+  <collision>
+    <geometry>
+      <box size="0.1 0.1 0.1"/>
+    </geometry>
+  </collision>
+</link>
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+  <gazebo>
+    <plugin name="link_accel_plugin" filename="libgazebo_link_accel_plugin.so">
+      <updateRate>500.0</updateRate>
+      <robotNamespace>/</robotNamespace>
+      <topicName>/gazebo/link_accel</topicName>
+      <gaussianNoise>0.0</gaussianNoise>
+    </plugin>
+  </gazebo>
+
+  <!-- Ground Truth Pose Plugin -->
+  <gazebo>
+    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>100.0</updateRate>
+      <bodyName>link_7</bodyName>
+      <topicName>/ee_pose_ground_truth</topicName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <frameName>world</frameName>
+      <xyzOffsets>0 0 0</xyzOffsets>
+      <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+  </gazebo>
+</robot>
+  

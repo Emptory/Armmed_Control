@@ -1,0 +1,41 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 100   # 高一点，方便你采样
+
+# ==========================================================
+# 每个关节都使用 Effort 控制器 —— 不施加力，只读力
+# ==========================================================
+joint_1_effort_controller:
+  type: effort_controllers/JointEffortController
+  joint: lbr_iiwa_joint_1
+
+joint_2_effort_controller:
+  type: effort_controllers/JointEffortController
+  joint: lbr_iiwa_joint_2
+
+joint_3_effort_controller:
+  type: effort_controllers/JointEffortController
+  joint: lbr_iiwa_joint_3
+
+joint_4_effort_controller:
+  type: effort_controllers/JointEffortController
+  joint: lbr_iiwa_joint_4
+
+joint_5_effort_controller:
+  type: effort_controllers/JointEffortController
+  joint: lbr_iiwa_joint_5
+
+joint_6_effort_controller:
+  type: effort_controllers/JointEffortController
+  joint: lbr_iiwa_joint_6
+
+joint_7_effort_controller:
+  type: effort_controllers/JointEffortController
+  joint: lbr_iiwa_joint_7
+
+
+

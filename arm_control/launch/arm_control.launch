@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load controller parameters -->
+  <rosparam file="$(find arm_control)/config/arm_controller.yaml" command="load"/>
+  <rosparam file="$(find arm_control)/config/joint_state_controller.yaml" command="load"/>
+  
+  <!-- Spawn Joint State Controller -->
+  <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="joint_state_controller"/>
+
+  <!-- Spawn Arm Controller -->
+  <node name="arm_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="arm_controller"/>
+    
+  <!-- Robot State Publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+  </node>
+</launch>

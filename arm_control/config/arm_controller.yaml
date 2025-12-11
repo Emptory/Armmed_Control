@@ -1,0 +1,33 @@
+arm_controller:
+  type: arm_control/ArmController
+  
+  # Robot
+  urdf_file: "" # Will use robot_description if empty
+  ee_frame: "link_7"
+  base_frame: "base_link"
+  
+  # Trajectory
+  amplitude_x: 0.0
+  amplitude_z: 0.0
+  frequency: 0.5
+  phase_x: 0.0
+  phase_z: 1.57079632679 # PI/2
+  # 建议修改为：
+  base_pos_x: 0.0
+  base_pos_y: 0.0
+  base_pos_z: 1.0 # 抬高一点，避免撞地
+  
+  # Control
+  mpc_rate: 50.0
+  kp: 122.0
+  kd: 15.0
+  
+  # Joints
+  joint_names:
+    - joint_a1
+    - joint_a2
+    - joint_a3
+    - joint_a4
+    - joint_a5
+    - joint_a6
+    - joint_a7

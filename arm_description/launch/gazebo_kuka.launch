@@ -1,0 +1,34 @@
+<launch>
+  <!-- 1️⃣ 载入 iiwa 模型 -->
+  <arg name="model" default="$(find arm_description)/urdf/lbr_iiwa_14_r820.xacro"/>
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
+
+  <!-- 2️⃣ 启动 Gazebo -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+  </include>
+
+  <!-- 3️⃣ 发布机器人状态 -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="state_publisher" />
+
+  <!-- 4️⃣ 生成模型 -->
+  <node name="spawn_iiwa" pkg="gazebo_ros" type="spawn_model"
+        args="-param robot_description -urdf -model iiwa" />
+
+  <!-- ✅ 5️⃣ 加载控制器配置文件 -->
+  <rosparam file="$(find arm_description)/config/joint_position_controllers.yaml" command="load"/>
+
+  <!-- ✅ 6️⃣ 启动 ros_control 控制器管理器 -->
+<node name="controller_spawner" pkg="controller_manager" type="spawner" args="
+  joint_state_controller
+  joint_1_effort_controller
+  joint_2_effort_controller
+  joint_3_effort_controller
+  joint_4_effort_controller
+  joint_5_effort_controller
+  joint_6_effort_controller
+  joint_7_effort_controller
+
+" />
+
+</launch>
