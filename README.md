@@ -4,14 +4,17 @@
 
 *   Ubuntu 20.04
 *   ROS Noetic
-*   OCS2 Framework
+*   OCS2
 *   Pinocchio
+*   legged_control
 
 ---
 
 本项目在 **OCS2 (Optimal Control for Switched Systems)** 框架下搭建了一个针对 7 自由度机械臂（KUKA LBR iiwa）的非线性模型预测控制器 (NMPC)。
 
 项目主要利用 **Pinocchio** 库处理刚体动力学 (RNEA)，并在 **Gazebo** 环境中验证控制效果。主要目的是验证 NMPC 在机械臂末端轨迹追踪及重力补偿任务中的可行性与实时性（配置频率 50Hz）。
+
+本项目主要基于legged_control开源项目的manipulator实例修改，最好安装在legged_control的src目录下。
 
 ---
 
