@@ -40,7 +40,7 @@ $$ \tau_{cmd} = \tau_{ff}(q_{ref}, \dot{q}_{ref}, \ddot{q}_{ref}) + K_p(q_{ref} 
     *   修改了末端执行器（End-Effector）的约束定义，去除了与移动底座耦合的部分，仅保留机械臂末端的 Pose 约束。
     *   调整了 Cost Function 中的权重矩阵（Q, R），针对机械臂的关节力矩范围和运动特性进行了重新整定。
 3.  **工程结构**：
-    *   复用了 `legged_control` 的 CMake 构建系统和消息接口，保持了与原工作区的一致性，便于依赖管理。
+    *   复用了 `legged_control` 的一些接口。
 
 ---
 
