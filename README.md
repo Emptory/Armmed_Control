@@ -42,9 +42,67 @@ $$ \tau_{cmd} = \tau_{ff}(q_{ref}, \dot{q}_{ref}, \ddot{q}_{ref}) + K_p(q_{ref} 
 3.  **工程结构**：
     *   复用了 `legged_control` 的一些接口。
 
+----
+
+### 文件结构
+
+```
+legged_ws/
+├── src/
+│   ├── arm_control/
+│   │   ├── launch/
+│   │   │   └── arm_control.launch
+│   │   ├── config/
+│   │   │   ├── arm_controller.yaml
+│   │   │   └── arm_slq_config.yaml
+│   │   ├── include/
+│   │   └── src/
+    		├── ArmController.cpp
+    	    ├── FactoryFunctions.cpp
+    	    ├── MobileManipulatorInterface.cpp
+    	    ├── MobileManipulatorPinocchioMapping.cpp
+    	    ├── MobileManipulatorPreComputation.cpp
+    	    ├── SineReferenceManager.cpp
+     	    ├── constraint/EndEffectorConstraint.cpp
+     	    └── dynamics/DefaultManipulatorDynamics.cpp
+│   ├── arm_description/
+│   │   ├── urdf/
+│   │   │   ├── lbr_iiwa_14_r820.urdf
+│   │   │   └── lbr_iiwa_14_r820.xacro
+│   │   ├── meshes/
+│   │   └── launch/gazebo_kuka.launch
+│   └── arm_gazebo/
+        └── launch/arm_world.launch
+```
+
+简要说明：
+- arm_control：核心控制代码（OCS2 接口、参考管理、代价/约束、动力学封装）。
+  - arm_controller.yaml
+    - MPC 运行频率：mpc_rate
+    - SineReference ：目标位置 base_pos、振幅 amplitude_x/ amplitude_z、频率 frequency 等。
+    - kp,kd。
+  - MobileManipulatorPinocchioMapping.cpp
+    - Pinocchio映射
+  - MobileManipulatorPreComputation.cpp
+    - 预计算，OCS2提前计算与重用某些动力学/雅可比相关项所要求的
+  - SineReferenceManager.cpp
+    - 使用ocs2::TargetTrajectories生成正弦波
+  - EndEffectorConstraint.cpp
+    - 末端执行器的软约束实现，把末端误差转换为 cost/constraint 项。
+  - DefaultManipulatorDynamics.cpp
+    - 固定基座机械臂的动力学实现。
+  - MobileManipulatorInterface.cpp
+    - 配置整个OCS2的最优控制问题
+  - ArmController.cpp
+    - 控制器，负责根据MPC输出的动力学预测的序列插值之后，转成力矩，
+- arm_description：机械臂 URDF / mesh与 Gazebo 加载配置。
+- arm_gazebo：仿真场景，启动文件。
+
 ---
 
-### 视频
+### 视频&图片
+
+展示效果
 
 https://github.com/user-attachments/assets/48769388-ea3e-4778-ba22-d5b5bea2b204
 
