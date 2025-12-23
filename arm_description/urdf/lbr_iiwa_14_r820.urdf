@@ -366,7 +366,7 @@
 <link name="payload_link">
   <inertial>
     <origin xyz="0 0 0" rpy="0 0 0"/>
-    <mass value="10.0"/>  <!-- 2kg 负载 -->
+    <mass value="00.0"/>  <!-- 2kg 负载 -->
     <inertia
       ixx="0.01" ixy="0" ixz="0"
       iyy="0.01" iyz="0"

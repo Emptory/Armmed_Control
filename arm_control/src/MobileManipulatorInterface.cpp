@@ -70,9 +70,11 @@ MobileManipulatorInterface::MobileManipulatorInterface(const std::string& urdfFi
                                                        const std::string& baseFrame,
                                                        const vector_t& basePosition,
                                                        scalar_t amplitudeX,
+                                                       scalar_t amplitudeY,
                                                        scalar_t amplitudeZ,
                                                        scalar_t frequency,
                                                        scalar_t phaseX,
+                                                       scalar_t phaseY,
                                                        scalar_t phaseZ,
                                                        const std::string& libraryFolder,
                                                        bool recompileLibraries) {
@@ -124,7 +126,7 @@ MobileManipulatorInterface::MobileManipulatorInterface(const std::string& urdfFi
 
   // Reference Manager
   referenceManagerPtr_ = std::make_shared<SineReferenceManager>(
-      basePosition, amplitudeX, 0.0, amplitudeZ, frequency, phaseX, phaseZ);
+      basePosition, amplitudeX, amplitudeY, amplitudeZ, frequency, phaseX, phaseY, phaseZ);
   
   // Optimal Control Problem
   // Cost
@@ -150,6 +152,7 @@ MobileManipulatorInterface::MobileManipulatorInterface(const std::string& urdfFi
 
   // End-effector
   bool usePreComputation = true;
+  // [USER REQUEST] Disable End-Effector constraint to test gravity compensation only
   problem_.stateSoftConstraintPtr->add("endEffector", getEndEffectorConstraint(*pinocchioInterfacePtr_, "", "endEffector",
                                                                                usePreComputation, libraryFolder, recompileLibraries));
   problem_.finalSoftConstraintPtr->add("finalEndEffector", getEndEffectorConstraint(*pinocchioInterfacePtr_, "", "finalEndEffector",

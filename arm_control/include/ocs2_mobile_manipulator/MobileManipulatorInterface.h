@@ -58,9 +58,11 @@ class MobileManipulatorInterface final : public RobotInterface {
                              const std::string& baseFrame,
                              const vector_t& basePosition,
                              scalar_t amplitudeX,
+                             scalar_t amplitudeY,
                              scalar_t amplitudeZ,
                              scalar_t frequency,
                              scalar_t phaseX,
+                             scalar_t phaseY,
                              scalar_t phaseZ,
                              const std::string& libraryFolder,
                              bool recompileLibraries);

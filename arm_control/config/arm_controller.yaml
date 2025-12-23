@@ -7,17 +7,21 @@ arm_controller:
   base_frame: "base_link"
   
   # Trajectory
-  amplitude_x: 0.0
-  amplitude_z: 0.0
+  amplitude_x: 0.1
+  amplitude_y: 0.1
+  amplitude_z: 0.1
   frequency: 0.5
   phase_x: 0.0
+  phase_y: 0.0
   phase_z: 1.57079632679 # PI/2
   # 建议修改为：
-  base_pos_x: 0.0
+  base_pos_x: 0.6
   base_pos_y: 0.0
-  base_pos_z: 1.0 # 抬高一点，避免撞地
+  base_pos_z: 0.4 # 抬高一点，避免撞地
   
   # Control
+  # control_mode: 1 = MPC (OCS2), 2 = IK+ID (Jacobian Inverse + RNEA)
+  control_mode: 1
   mpc_rate: 50.0
   kp: 122.0
   kd: 15.0

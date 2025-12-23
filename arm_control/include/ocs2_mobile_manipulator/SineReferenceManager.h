@@ -40,6 +40,7 @@ class SineReferenceManager : public ocs2::ReferenceManager {
                        ocs2::scalar_t amplitudeZ,
                        ocs2::scalar_t frequency,
                        ocs2::scalar_t phaseX = 0.0,
+                       ocs2::scalar_t phaseY = 0.0,
                        ocs2::scalar_t phaseZ = 0.0);
 
   ~SineReferenceManager() override = default;
@@ -82,6 +83,7 @@ class SineReferenceManager : public ocs2::ReferenceManager {
   ocs2::scalar_t frequency_;  // frequency in Hz
   ocs2::scalar_t omega_;  // 2*pi*frequency
   ocs2::scalar_t phaseX_;
+  ocs2::scalar_t phaseY_;
   ocs2::scalar_t phaseZ_;
 };
 

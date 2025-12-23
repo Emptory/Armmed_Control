@@ -26,6 +26,9 @@
 
 #include <pinocchio/fwd.hpp>
 #include <pinocchio/algorithm/rnea.hpp>
+#include <pinocchio/algorithm/crba.hpp>
+#include <pinocchio/algorithm/jacobian.hpp>
+#include <pinocchio/algorithm/frames.hpp>
 
 #include <mutex>
 #include <thread>
@@ -77,8 +80,14 @@ private:
   double kp_, kd_;
   double mpcRate_;
   
+  // Control Mode: 1 = MPC, 2 = IK+ID
+  int controlMode_;
+  
+  // IK+ID mode: end-effector frame id
+  pinocchio::FrameIndex eeFrameId_;
+  
   // Parameters
-  double phaseX_, phaseZ_;
+  double phaseX_, phaseY_, phaseZ_;
   
   // Time
   ros::Time startTime_;
