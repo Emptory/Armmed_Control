@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-  <xacro:macro name="kuka_lbr_iiwa_14_r820" params="prefix">
+  <xacro:macro name="kuka_lbr_iiwa_14_r820" params="prefix origin_xyz:='0 0 0' origin_rpy:='0 0 0'">
   <link name="world"/>
     <!-- link list -->
     <link name="${prefix}base_link">
@@ -235,12 +235,38 @@
   <limit lower="-3.0541" upper="3.0541" effort="200" velocity="2.356" />
 </joint>
 
-<!-- ✅ 新增末端滑动关节（沿世界 X 方向） -->
+  <!-- Payload (2kg) -->
+  <joint name="${prefix}payload_joint" type="fixed">
+    <parent link="${prefix}link_7"/>
+    <child link="${prefix}payload_link"/>
+    <origin xyz="0 0 0.2" rpy="0 0 0"/>
+  </joint>
 
-  <!-- Gazebo 扩展：让轴方向固定在世界坐标 -->
+  <link name="${prefix}payload_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="payload_grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
 
-
-<!-- ✅ 固定连接到世界 -->
+  <gazebo reference="${prefix}payload_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
 <link name="${prefix}base" />
 <joint name="${prefix}base_link-base" type="fixed">
   <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -251,7 +277,7 @@
 <joint name="${prefix}world_fixed" type="fixed">
   <parent link="world"/>
   <child link="${prefix}base_link"/>
-  <origin xyz="0 0 0" rpy="0 0 0"/>
+  <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
 </joint>
       <!-- ================== transmissions ================== -->
   <transmission name="${prefix}joint_1_trans">
@@ -330,7 +356,7 @@
   <!-- 启用 ROS 控制插件 -->
 <gazebo>
   <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-    <robotNamespace>/</robotNamespace>
+    <!-- <robotNamespace>/</robotNamespace> REMOVED to allow namespacing -->
     <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     <gravity_compensation>false</gravity_compensation>
   </plugin>

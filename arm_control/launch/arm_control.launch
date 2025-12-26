@@ -4,13 +4,20 @@
   <rosparam file="$(find arm_control)/config/arm_controller.yaml" command="load"/>
   <rosparam file="$(find arm_control)/config/joint_state_controller.yaml" command="load"/>
   
+  <!-- Load robot description globally for single arm setup -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find arm_description)/urdf/lbr_iiwa_14_r820.xacro' origin_xyz:='0 0 0'" />
+  <param name="arm_controller/robot_description" command="$(find xacro)/xacro --inorder '$(find arm_description)/urdf/lbr_iiwa_14_r820.xacro' origin_xyz:='0 0 0'" />
+
   <!-- Spawn Joint State Controller -->
   <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output="screen" args="joint_state_controller"/>
 
   <!-- Spawn Arm Controller -->
   <node name="arm_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="arm_controller"/>
+    output="screen" args="arm_controller">
+    <!-- Ensure robot_description is available in the controller's namespace -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find arm_description)/urdf/lbr_iiwa_14_r820.xacro' origin_xyz:='0 0 0'" />
+  </node>
     
   <!-- Robot State Publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"

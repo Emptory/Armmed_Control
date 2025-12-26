@@ -1,0 +1,44 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <!-- Start Gazebo with an empty world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <!-- Spawn Robot 1 -->
+  <group ns="arm1">
+    <param name="tf_prefix" value="arm1" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find arm_description)/urdf/lbr_iiwa_14_r820.xacro' origin_xyz:='0 0 0'" />
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          args="-urdf -model arm1 -param robot_description" />
+  </group>
+
+  <!-- Spawn Robot 2 -->
+  <group ns="arm2">
+    <param name="tf_prefix" value="arm2" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find arm_description)/urdf/lbr_iiwa_14_r820.xacro' origin_xyz:='1 0 0'" />
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          launch-prefix="bash -c 'sleep 2; $0 $@' "
+          args="-urdf -model arm2 -param robot_description" />
+  </group>
+
+  <!-- Spawn Robot 3 -->
+  <group ns="arm3">
+    <param name="tf_prefix" value="arm3" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find arm_description)/urdf/lbr_iiwa_14_r820.xacro' origin_xyz:='0 1 0'" />
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          launch-prefix="bash -c 'sleep 4; $0 $@' "
+          args="-urdf -model arm3 -param robot_description" />
+  </group>
+
+</launch>

@@ -14,6 +14,7 @@
 #include <fstream>
 #include <pinocchio/algorithm/joint-configuration.hpp>
 #include <geometry_msgs/PointStamped.h>
+#include <geometry_msgs/PoseStamped.h>
 
 namespace arm_control {
 
@@ -49,7 +50,11 @@ bool ArmController::init(hardware_interface::EffortJointInterface* hw, ros::Node
   nh.param<double>("base_pos_x", basePosX, 0.0);
   nh.param<double>("base_pos_y", basePosY, 0.0);
   nh.param<double>("base_pos_z", basePosZ, 0.8);
-  nh.param<std::string>("library_folder", libraryFolder, "/tmp/arm_control_ocs2");
+
+  // Use a shared library folder for all instances since they use the same URDF (origin 0)
+  // This avoids compiling the same model 3 times and saves memory/CPU
+  nh.param<std::string>("library_folder", libraryFolder, "/tmp/arm_control_ocs2_shared");
+  
   nh.param<bool>("recompile_libraries", recompileLibraries, true);
   
   nh.param<double>("mpc_rate", mpcRate_, 100.0);
@@ -62,8 +67,21 @@ bool ArmController::init(hardware_interface::EffortJointInterface* hw, ros::Node
   // Handle URDF
   if (urdfFile.empty()) {
     std::string urdfString;
-    if (nh.getParam("/robot_description", urdfString)) {
-      urdfFile = "/tmp/temp_arm_control.urdf";
+    std::string robotDescriptionParam;
+    
+    // Search for robot_description up the tree (handles namespacing)
+    if (nh.searchParam("robot_description", robotDescriptionParam)) {
+      nh.getParam(robotDescriptionParam, urdfString);
+    } else if (nh.getParam("/robot_description", urdfString)) {
+      // Fallback to global
+    }
+
+    if (!urdfString.empty()) {
+      // Use a unique temporary file for each instance to avoid conflicts
+      std::string ns = nh.getNamespace();
+      // Remove leading slashes and replace others with underscores for filename
+      std::replace(ns.begin(), ns.end(), '/', '_');
+      urdfFile = "/tmp/temp_arm_control" + ns + ".urdf";
       std::ofstream out(urdfFile);
       out << urdfString;
       out.close();
@@ -77,32 +95,55 @@ bool ArmController::init(hardware_interface::EffortJointInterface* hw, ros::Node
   // Initialize OCS2 Interface
   Eigen::Vector3d basePosition(basePosX, basePosY, basePosZ);
   try {
+    ROS_INFO_STREAM("Initializing MobileManipulatorInterface for namespace: " << nh.getNamespace());
+    ROS_INFO_STREAM("URDF File: " << urdfFile);
+    ROS_INFO_STREAM("Library Folder: " << libraryFolder);
+    
     armInterfacePtr_ = std::make_unique<ocs2::mobile_manipulator::MobileManipulatorInterface>(
         urdfFile, eeFrame, baseFrame, basePosition,
         amplitudeX, amplitudeY, amplitudeZ, frequency,
         phaseX_, phaseY_, phaseZ_,
         libraryFolder, recompileLibraries);
+    ROS_INFO("MobileManipulatorInterface initialized successfully.");
   } catch (const std::exception& e) {
     ROS_ERROR_STREAM("Failed to create MobileManipulatorInterface: " << e.what());
+    return false;
+  } catch (...) {
+    ROS_ERROR("Failed to create MobileManipulatorInterface: Unknown exception.");
     return false;
   }
 
   // Initialize MPC
-  mpcPtr_ = std::make_unique<ocs2::GaussNewtonDDP_MPC>(
-      armInterfacePtr_->mpcSettings(),
-      armInterfacePtr_->ddpSettings(),
-      armInterfacePtr_->getRollout(),
-      armInterfacePtr_->getOptimalControlProblem(),
-      armInterfacePtr_->getInitializer());
-  
-  mpcPtr_->getSolverPtr()->setReferenceManager(armInterfacePtr_->getReferenceManagerPtr());
+  try {
+    mpcPtr_ = std::make_unique<ocs2::GaussNewtonDDP_MPC>(
+        armInterfacePtr_->mpcSettings(),
+        armInterfacePtr_->ddpSettings(),
+        armInterfacePtr_->getRollout(),
+        armInterfacePtr_->getOptimalControlProblem(),
+        armInterfacePtr_->getInitializer());
+    
+    mpcPtr_->getSolverPtr()->setReferenceManager(armInterfacePtr_->getReferenceManagerPtr());
+  } catch (const std::exception& e) {
+    ROS_ERROR_STREAM("Failed to create MPC: " << e.what());
+    return false;
+  }
 
   // Initialize MRT
-  mrtPtr_ = std::make_unique<ocs2::MPC_MRT_Interface>(*mpcPtr_);
+  try {
+    mrtPtr_ = std::make_unique<ocs2::MPC_MRT_Interface>(*mpcPtr_);
+  } catch (const std::exception& e) {
+    ROS_ERROR_STREAM("Failed to create MRT: " << e.what());
+    return false;
+  }
 
   // Initialize Pinocchio
-  pinocchioModel_ = &armInterfacePtr_->getPinocchioInterface().getModel();
-  pinocchioData_ = std::make_unique<pinocchio::Data>(*pinocchioModel_);
+  try {
+    pinocchioModel_ = &armInterfacePtr_->getPinocchioInterface().getModel();
+    pinocchioData_ = std::make_unique<pinocchio::Data>(*pinocchioModel_);
+  } catch (const std::exception& e) {
+    ROS_ERROR_STREAM("Failed to initialize Pinocchio data: " << e.what());
+    return false;
+  }
   
   // Get EE frame ID for IK mode
   if (pinocchioModel_->existFrame(eeFrame)) {
@@ -134,6 +175,10 @@ bool ArmController::init(hardware_interface::EffortJointInterface* hw, ros::Node
 
   currentQ_.resize(numJoints_);
   currentQdot_.resize(numJoints_);
+
+  // Initialize Publishers
+  eePosePub_ = nh.advertise<geometry_msgs::PoseStamped>("ee_pose", 1);
+  eeTargetPub_ = nh.advertise<geometry_msgs::PointStamped>("ee_pose_target", 1);
 
   ROS_INFO("ArmController initialized successfully");
   return true;
@@ -190,23 +235,28 @@ void ArmController::starting(const ros::Time& time) {
     return;
   }
   
-  int waitCount = 0;
-  while (!mrtPtr_->initialPolicyReceived() && waitCount < 100) {
-    ros::Duration(0.01).sleep();
-    waitCount++;
-    if (waitCount % 10 == 0) ROS_INFO("Waiting for initial policy...");
-  }
-  
-  if (mrtPtr_->initialPolicyReceived()) {
-    mrtPtr_->updatePolicy();
-    ROS_INFO("Initial policy received");
-  } else {
-    ROS_ERROR("Failed to receive initial policy");
-  }
+  if (controlMode_ == 1) {
+    int waitCount = 0;
+    while (!mrtPtr_->initialPolicyReceived() && waitCount < 100) {
+      ros::Duration(0.01).sleep();
+      waitCount++;
+      if (waitCount % 10 == 0) ROS_INFO("Waiting for initial policy...");
+    }
+    
+    if (mrtPtr_->initialPolicyReceived()) {
+      mrtPtr_->updatePolicy();
+      ROS_INFO("Initial policy received");
+    } else {
+      ROS_ERROR("Failed to receive initial policy");
+    }
 
-  mpcRunning_ = true;
-  mpcThread_ = std::thread(&ArmController::mpcThread, this);
-  ROS_INFO("MPC Thread started");
+    mpcRunning_ = true;
+    mpcThread_ = std::thread(&ArmController::mpcThread, this);
+    ROS_INFO("MPC Thread started");
+  } else {
+    ROS_INFO("Control Mode is not MPC (1), skipping MPC thread start.");
+    mpcRunning_ = false;
+  }
 }
 
 void ArmController::update(const ros::Time& time, const ros::Duration& period) {
@@ -230,20 +280,34 @@ void ArmController::update(const ros::Time& time, const ros::Duration& period) {
     auto& refManager = armInterfacePtr_->getSineReferenceManager();
     Eigen::Vector3d x_des_viz = refManager.computeSinePosition(t);
     
-    static ros::Publisher target_pub;
-    static bool pub_initialized = false;
-    if (!pub_initialized) {
-      ros::NodeHandle nh;
-      target_pub = nh.advertise<geometry_msgs::PointStamped>("/ee_pose_target", 1);
-      pub_initialized = true;
-    }
     geometry_msgs::PointStamped msg;
     msg.header.stamp = time;
     msg.header.frame_id = "world";
     msg.point.x = x_des_viz(0);
     msg.point.y = x_des_viz(1);
     msg.point.z = x_des_viz(2);
-    target_pub.publish(msg);
+    eeTargetPub_.publish(msg);
+  }
+
+  // Publish Actual EE Pose
+  {
+      pinocchio::forwardKinematics(*pinocchioModel_, *pinocchioData_, currentQ_);
+      pinocchio::updateFramePlacements(*pinocchioModel_, *pinocchioData_);
+      const auto& eePose = pinocchioData_->oMf[eeFrameId_];
+      const auto& translation = eePose.translation();
+      const auto& rotation = Eigen::Quaterniond(eePose.rotation());
+
+      geometry_msgs::PoseStamped poseMsg;
+      poseMsg.header.stamp = time;
+      poseMsg.header.frame_id = "base_link";
+      poseMsg.pose.position.x = translation.x();
+      poseMsg.pose.position.y = translation.y();
+      poseMsg.pose.position.z = translation.z();
+      poseMsg.pose.orientation.x = rotation.x();
+      poseMsg.pose.orientation.y = rotation.y();
+      poseMsg.pose.orientation.z = rotation.z();
+      poseMsg.pose.orientation.w = rotation.w();
+      eePosePub_.publish(poseMsg);
   }
 
   // ===================== Mode 1: MPC =====================

@@ -91,6 +91,10 @@ private:
   
   // Time
   ros::Time startTime_;
+
+  // Publishers
+  ros::Publisher eePosePub_;
+  ros::Publisher eeTargetPub_;
 };
 
 } // namespace arm_control

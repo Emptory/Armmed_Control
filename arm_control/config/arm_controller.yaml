@@ -3,14 +3,14 @@ arm_controller:
   
   # Robot
   urdf_file: "" # Will use robot_description if empty
-  ee_frame: "link_7"
-  base_frame: "base_link"
+  ee_frame: "lbr_iiwa_link_7"
+  base_frame: "lbr_iiwa_base_link"
   
   # Trajectory
   amplitude_x: 0.1
   amplitude_y: 0.1
   amplitude_z: 0.1
-  frequency: 0.5
+  frequency: 0.5  # Reduced from 2.0 to 0.3 Hz for better tracking with 3 arms
   phase_x: 0.0
   phase_y: 0.0
   phase_z: 1.57079632679 # PI/2
@@ -21,17 +21,21 @@ arm_controller:
   
   # Control
   # control_mode: 1 = MPC (OCS2), 2 = IK+ID (Jacobian Inverse + RNEA)
-  control_mode: 1
+  control_mode: 2
   mpc_rate: 50.0
   kp: 122.0
   kd: 15.0
   
   # Joints
   joint_names:
-    - joint_a1
-    - joint_a2
-    - joint_a3
-    - joint_a4
-    - joint_a5
-    - joint_a6
-    - joint_a7
+    - lbr_iiwa_joint_1
+    - lbr_iiwa_joint_2
+    - lbr_iiwa_joint_3
+    - lbr_iiwa_joint_4
+    - lbr_iiwa_joint_5
+    - lbr_iiwa_joint_6
+    - lbr_iiwa_joint_7
+
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50

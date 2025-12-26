@@ -16,7 +16,7 @@
   </include>
 
   <!-- Robot 1 -->
-  <param name="robot_description" textfile="$(find arm_description)/urdf/lbr_iiwa_14_r820.urdf"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find arm_description)/urdf/lbr_iiwa_14_r820.xacro' origin_xyz:='0 0 0'" />
   <node name="spawn_robot1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param robot_description -model robot1 -x 0 -y 0 -z 0"
         output="screen"/>
